@@ -1,0 +1,4 @@
+"C:\\Users\\Datasus\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" "C:\\Users\\Datasus\\OneDrive - Ministério da Saúde\\Documents\\criar_csv.py"
+
+
+C:\Users\Datasus\AppData\Local\Programs\Python\Python313\python.exe

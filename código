@@ -1,0 +1,58 @@
+import csv
+import requests
+import os
+
+# Endpoint da API
+url = "https://apidadosabertos.saude.gov.br/cnes/estabelecimentos"
+
+import csv
+import requests
+import os
+
+# Caminho para a pasta de Downloads do usuário
+downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+output_file_path = os.path.join(downloads_path, "cnes_pad_output.csv")
+
+# URL base da API
+url = "https://apidadosabertos.saude.gov.br/cnes/estabelecimentos"
+
+# Parâmetros de paginação
+limit = 10  # Pode ser até 1000
+offset = 0
+all_estabelecimentos = []
+
+while True:
+    params = {
+        'limit': limit,
+        'offset': offset
+    }
+
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        estabelecimentos = data.get('estabelecimentos', [])
+
+        if not estabelecimentos:
+            break  # Fim dos dados
+
+        all_estabelecimentos.extend(estabelecimentos)
+        offset += limit  # Pula para a próxima página
+
+        print(f"{len(estabelecimentos)} registros coletados... Total acumulado: {len(all_estabelecimentos)}")
+    else:
+        print(f"Erro na requisição: {response.status_code}")
+        break
+
+# Salvar todos os dados em CSV
+if all_estabelecimentos:
+    keys = all_estabelecimentos[0].keys()
+
+    with open(output_file_path, 'w', newline='', encoding='utf-8') as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=keys)
+        writer.writeheader()
+        writer.writerows(all_estabelecimentos)
+
+    print(f"Arquivo CSV salvo com sucesso: {output_file_path}")
+else:
+    print("Nenhum dado encontrado para exportar.")
